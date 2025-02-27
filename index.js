@@ -36,13 +36,14 @@ io.on('connection', (socket) => {
 });
 
 // Express endpoint to clear chat (emits "clear chat" to all clients)
-app.get('/clean', (req, res) => {
+app.post('/clean', (req, res) => {
     io.emit('clear chat');
     res.json({ status: 'ok', message: 'Chat cleared.' });
+    console.log("cleaned");
 });
 
 // Express endpoint to generate a random partner bio
-app.get('/partner', (req, res) => {
+app.post('/new', (req, res) => {
     const partnerBio = [];
 
     // 20% chance to include Language
@@ -89,13 +90,18 @@ app.get('/partner', (req, res) => {
     }
 
     io.emit('clear chat');
+    setTimeout(() => {
+        io.emit('chat message', { senderId: "", text: "Connected with Somebody" });
+    }, 100);
 
     res.json({ partnerBio });
 
+    console.log("new user", partnerBio);
+
     partnerBio.forEach(element => {
         setTimeout(() => {
-            io.emit('chat message', { senderId: "socket.id", text: element });
-        }, Math.round(Math.random() * 400) + 70);
+            io.emit('chat message', { senderId: "", text: element });
+        }, Math.round(Math.random() * 400) + 200);
     });
 
 
