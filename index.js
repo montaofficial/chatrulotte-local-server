@@ -1,16 +1,18 @@
-// server.js
 const express = require('express');
 const http = require('http');
 const socketIO = require('socket.io');
 const cors = require('cors');
-
 const app = express();
 const server = http.createServer(app);
-const io = socketIO(server);
-
+// Updated socket.io with CORS settings:
+const io = socketIO(server, {
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"]
+    }
+});
 // Allow all CORS requests
 app.use(cors());
-
 // Serve static files from the "www" folder
 app.use(express.static('www'));
 
