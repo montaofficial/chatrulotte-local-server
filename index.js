@@ -86,7 +86,17 @@ app.get('/partner', (req, res) => {
         partnerBio.push("Age: " + age);
     }
 
+    io.emit('clear chat');
+
     res.json({ partnerBio });
+
+    partnerBio.forEach(element => {
+        setTimeout(() => {
+            io.emit('chat message', { senderId: "socket.id", text: element });
+        }, Math.round(Math.random() * 400) + 70);
+    });
+
+
 });
 
 // Listen on IP 10.11.4.110, port 8021
